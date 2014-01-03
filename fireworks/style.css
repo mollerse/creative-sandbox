@@ -1,0 +1,8 @@
+body {
+  background: #222222;
+  padding: 1em; }
+
+canvas {
+  background: #333333;
+  margin: 0 auto;
+  display: block; }
