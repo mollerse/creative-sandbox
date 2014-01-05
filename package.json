@@ -8,6 +8,7 @@
     "gulp-sass": "~0.2.2",
     "gulp-concat": "~2.1.6",
     "express": "~3.4.7",
-    "connect-livereload": "~0.3.1"
+    "connect-livereload": "~0.3.1",
+    "through": "~2.3.4"
   }
 }
