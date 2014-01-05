@@ -6,9 +6,7 @@ var ctx = canvas.getContext('2d');
 var cos = Math.cos;
 var sin = Math.sin;
 
-function random (min, max) {
-  return (Math.random() * (max - min)) + min;
-};
+var random = require('../../utils/random');
 
 function clearContext() {
   ctx.fillStyle = "#000";
