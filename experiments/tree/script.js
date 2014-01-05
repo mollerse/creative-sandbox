@@ -39,8 +39,6 @@ function tree(x, y, height, width, left) {
     }
   };
 
-  // update();
-
   return {
     draw: function() {
       update();
@@ -59,7 +57,7 @@ function tree(x, y, height, width, left) {
 
 };
 
-var treeA = tree(width/2, height, 100, 15);
+var treeA = tree(width/2, height, Math.min(100, height/4), 15);
 var branches = [];
 
 function draw() {
