@@ -22,7 +22,8 @@ gulp.task('sass', function(){
 
       gulp.src(file.path+'/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest(file.path + '/build'));
+        .pipe(gulp.dest(file.path + '/build'))
+        .pipe(refresh(lr));;
 
     }));
 });
@@ -36,26 +37,28 @@ gulp.task('browserify', function(){
           debug: true
         }))
         .pipe(concat('bundle.js'))
-        .pipe(gulp.dest(file.path + '/build'));
+        .pipe(gulp.dest(file.path + '/build'))
+        .pipe(refresh(lr));;
 
     }));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('experiments/**/*.scss', function() {
-    gulp.run('sass');
-  });
-
-  gulp.watch(['experiments/**/*.js', '!experiments/**/build/*'], function() {
-    gulp.run('browserify');
-  });
-
   app.listen(devport);
   lr.listen(lrport, function(err) {
     if(err) return console.log(err);
 
-    gulp.watch('**/build/*', function(e) {
-      lr.changed({body: {files: e.path}});
+    gulp.watch('experiments/**/*.scss', function() {
+      gulp.run('sass');
     });
+
+    gulp.watch(['experiments/**/*.js', '!experiments/**/build/*'], function() {
+      gulp.run('browserify');
+    });
+
+    gulp.watch('experiments/**/*.html', function (e) {
+      lr.changed({body: {files: e.path}});
+    })
+
   })
 });
