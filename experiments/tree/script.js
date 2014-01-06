@@ -1,19 +1,29 @@
-var canvas = document.createElement('canvas');
-document.body.appendChild(canvas);
+var canvas = document.querySelector('.c');
 var ctx = canvas.getContext('2d');
-
-var width = canvas.width = window.innerWidth*0.94;
-var height = canvas.height = window.innerHeight*0.94;
+var width, height;
 
 var cos = Math.cos;
 var sin = Math.sin;
 var random = require('../../utils/random');
+var trimUnit = require('../../utils/trim');
 
 var clearContext = function clearContext() {
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, width, height);
   ctx.lineCap = 'round';
 };
+
+var canvasSize = function() {
+  var s;
+
+  setTimeout(function() {
+    s = getComputedStyle(canvas);
+    width = canvas.width = trimUnit(s.width, 'px');
+    height = canvas.height = trimUnit(s.height, 'px');
+    treeA = tree(width/2, height, Math.min(100, height/4), 15);
+    clearContext();
+  }, 5);
+}
 
 function tree(x, y, height, width, left) {
   var posX = x,
@@ -57,7 +67,7 @@ function tree(x, y, height, width, left) {
 
 };
 
-var treeA = tree(width/2, height, Math.min(100, height/4), 15);
+var treeA;
 var branches = [];
 
 function draw() {
@@ -77,9 +87,12 @@ function draw() {
 
 }
 
-clearContext();
+canvasSize();
+
 
 var interval = setInterval(draw, 100);
 setTimeout(function() {
   clearInterval(interval);
 }, 2000);
+
+addEventListener('resize', canvasSize, false);
