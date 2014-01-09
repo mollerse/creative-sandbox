@@ -1,0 +1,64 @@
+body {
+  background: #222;
+  padding: 2em;
+}
+
+.ball {
+  fill: #f00;
+  animation: {
+    name: move;
+    duration: 6s;
+    timing-function: linear;
+    iteration-count: infinite;
+  }
+}
+
+.line {
+  stroke: #0f0;
+  stroke-width: 4;
+  &.blue {
+    stroke: #00f;
+  }
+}
+
+.marker {
+  fill: #0f0;
+}
+
+text {
+  fill: #fff;
+  font-size: 25px;
+}
+
+#linear {
+  animation-timing-function: linear;
+}
+
+#easein {
+  animation-timing-function: ease-in;
+}
+
+#easeout {
+  animation-timing-function: ease-out;
+}
+
+#easeinout {
+  animation-timing-function: ease-in-out;
+}
+
+#bezier {
+  animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+}
+
+#steps {
+  animation-timing-function: steps(6, end);
+}
+
+#ease {
+  animation-timing-function: ease;
+}
+
+@keyframes move {
+  from { transform: translateX(0px); }
+  to { transform: translateX(400px); }
+}
