@@ -4,8 +4,8 @@ var width, height;
 
 var cos = Math.cos;
 var sin = Math.sin;
-var random = require('../../utils/random');
-var trimUnit = require('../../utils/trim');
+var random = require('../../../utils/random');
+var trimUnit = require('../../../utils/trim');
 
 var thingy;
 

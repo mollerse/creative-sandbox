@@ -5,25 +5,19 @@ var gulp = require('gulp'),
   lr = require('tiny-lr')(),
   concat = require('gulp-concat'),
   through = require('through'),
-  express = require('express'),
+  embedlr = require('gulp-embedlr'),
+  ecstatic = require('ecstatic'),
+  http = require('http'),
   lrport = 35729,
   devport = 1337;
-
-var app = express();
-  app.use(require('connect-livereload')({
-    port: lrport
-  }));
-  app.use(express.static('./experiments'));
-
 
 gulp.task('sass', function(){
   gulp.src('experiments/*')
     .pipe(through(function(file) {
-
-      gulp.src(file.path+'/*.scss')
+      gulp.src(file.path+'/src/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest(file.path + '/build'))
-        .pipe(refresh(lr));;
+        .pipe(gulp.dest(file.path + ''))
+        .pipe(refresh(lr));
 
     }));
 });
@@ -32,33 +26,51 @@ gulp.task('browserify', function(){
   gulp.src('experiments/*')
     .pipe(through(function(file) {
 
-      gulp.src(file.path+'/*.js')
+      gulp.src(file.path+'/src/*.js')
         .pipe(browserify({
           debug: true
         }))
         .pipe(concat('bundle.js'))
-        .pipe(gulp.dest(file.path + '/build'))
-        .pipe(refresh(lr));;
+        .pipe(gulp.dest(file.path + ''))
+        .pipe(refresh(lr));
 
     }));
 });
 
+gulp.task('html', function(){
+  gulp.src('experiments/*')
+    .pipe(through(function(file) {
+
+      gulp.src(file.path+'/src/*.html')
+        .pipe(embedlr())
+        .pipe(gulp.dest(file.path + ''))
+        .pipe(refresh(lr));
+
+  }));
+
+});
+
+gulp.task('build', function() {
+  gulp.run('html', 'browserify', 'sass');
+});
+
 gulp.task('watch', function() {
-  app.listen(devport);
+  http.createServer(ecstatic({ root: __dirname + '/experiments' })).listen(devport);
+
   lr.listen(lrport, function(err) {
     if(err) return console.log(err);
 
-    gulp.watch('experiments/**/*.scss', function() {
+    gulp.watch('experiments/**/src/*.scss', function() {
       gulp.run('sass');
     });
 
-    gulp.watch(['experiments/**/*.js', '!experiments/**/build/*'], function() {
+    gulp.watch(['experiments/**/src/*.js', '!experiments/**/build/*'], function() {
       gulp.run('browserify');
     });
 
-    gulp.watch('experiments/**/*.html', function (e) {
-      lr.changed({body: {files: e.path}});
-    })
+    gulp.watch('experiments/**/src/*.html', function () {
+      gulp.run('html');
+    });
 
-  })
+  });
 });
