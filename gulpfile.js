@@ -56,21 +56,17 @@ gulp.task('build', function() {
 
 gulp.task('watch', function() {
   http.createServer(ecstatic({ root: __dirname + '/experiments' })).listen(devport);
+  lr.listen(lrport);
 
-  lr.listen(lrport, function(err) {
-    if(err) return console.log(err);
+  gulp.watch('experiments/**/src/*.scss', function() {
+    gulp.run('sass');
+  });
 
-    gulp.watch('experiments/**/src/*.scss', function() {
-      gulp.run('sass');
-    });
+  gulp.watch(['experiments/**/src/*.js', '!experiments/**/build/*'], function() {
+    gulp.run('browserify');
+  });
 
-    gulp.watch(['experiments/**/src/*.js', '!experiments/**/build/*'], function() {
-      gulp.run('browserify');
-    });
-
-    gulp.watch('experiments/**/src/*.html', function () {
-      gulp.run('html');
-    });
-
+  gulp.watch('experiments/**/src/*.html', function () {
+    gulp.run('html');
   });
 });
